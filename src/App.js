@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Main_Page from "./modules";
+import MainPage from "./modules";
 import Search from "./modules/Search/search";
 
 function App() {
@@ -7,8 +7,8 @@ function App() {
     <div className=""  >
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Main_Page/>}/>
-          <Route path="/search/:keyword?" element={<Search/>}/>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/search/:keyword?" element={<Search />} />
         </Routes>
       </BrowserRouter>
     </div>

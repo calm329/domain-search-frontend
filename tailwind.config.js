@@ -1,16 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{html,js}"],
+  content: ["./src/**/*.{js,jsx,html}"],
   theme: {
-    fontFamily:{
-      openSans:['Open Sans', "sans-serif"]
+    fontFamily: {
+      openSans: ['Open Sans', "sans-serif"]
     },
-    extend: { 
+    extend: {
       fontSize: {
-        'h1' : '28px'
+        'h1': '28px'
       },
-      backgroundColor : {
-        'primary' : '#00A88E'
+      backgroundColor: {
+        'primary': '#00A88E'
       }
     },
   },

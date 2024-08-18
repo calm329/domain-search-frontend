@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import serachIcon from '../../assets/search.svg'
 import { Link, useNavigate } from 'react-router-dom'
 
-const Home_Section = () => {
+const HomeSection = () => {
 
   const keywords = [
     'app', 'blog', 'coffee', 'dating', 'fly', 'football', 'fun', 'game', 'gym', "help", 'iphone', 'mail', 'news', 'note', 'party', 'photo', 'pic', 'running', 'scifi', 'seo', 'shopping', 'sports', 'startup', 'stock', 'store', 'sushi', 'todo', 'web', 'world', 'yoga',
@@ -56,4 +56,4 @@ const Home_Section = () => {
   )
 }
 
-export default Home_Section
+export default HomeSection;
