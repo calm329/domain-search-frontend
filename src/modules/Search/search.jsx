@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from '../../Components/Header/header';
 import serachIcon from '../../assets/search.svg';
 import Footer from '../../Components/Footer/footer';
@@ -31,7 +31,7 @@ const Search = () => {
     const { data: suggetionsData } = useQuery({
         queryKey: [trimedKeyword],
         queryFn: getSuggetion,
-        enabled: trimedKeyword != "undefined",
+        enabled: trimedKeyword !== "undefined",
         staleTime: Infinity
     });
 
@@ -46,9 +46,9 @@ const Search = () => {
         if (!suggetionsData?.extentions) return [];
         let _data;
 
-        if (filter == "all") _data = suggetionsData?.extentions;
-        else if (filter == "start") _data = suggetionsData?.extentions?.filter((_d) => _d.endsWith("$"));
-        else if (filter == "end") _data = suggetionsData?.extentions?.filter((_d) => _d.startsWith("$"));
+        if (filter === "all") _data = suggetionsData?.extentions;
+        else if (filter === "start") _data = suggetionsData?.extentions?.filter((_d) => _d.endsWith("$"));
+        else if (filter === "end") _data = suggetionsData?.extentions?.filter((_d) => _d.startsWith("$"));
 
         if (sortOrder === 'popularity') return _data;
 
@@ -57,7 +57,7 @@ const Search = () => {
                 return a.length - b.length;
             } else if (sortOrder === 'alphabetical') {
                 return a.replace(/[\^$]/g, "").localeCompare(b.replace(/[\^$]/g, ""));
-            }
+            } else return a.length - b.length;
         });
     }, [suggetionsData, sortOrder, filter]);
 
@@ -88,7 +88,7 @@ const Search = () => {
             </div>
             <div className='flex  min-h-[45vh] max-h-auto items-center my-8 flex-col'>
 
-                <p className='text-xl font-semibold text-white'>{trimedKeyword != "undefined" ? `Search results for ${trimedKeyword}` : "Try searching domains"}</p>
+                <p className='text-xl font-semibold text-white'>{trimedKeyword !== "undefined" ? `Search results for ${trimedKeyword}` : "Try searching domains"}</p>
 
                 <div className='mt-10 py-4 max-w-[1000px] w-full px-4'>
 
@@ -107,47 +107,45 @@ const Search = () => {
                 </div>
 
                 <ul className='text-white py-4 max-w-[1000px] w-full px-4 mt-6'>
-                    {sortedData.map((result, index) => {
-                        console.log(result)
-                        return (
-                            <li className='p-5 border border-[#6feec7] border-opacity-25 capitalize flex justify-between' key={index}>
-                                <div className='flex'>
-                                    {result.endsWith("$") && <p className='capitalize font-bold text-neutral-100'>{result.replace(/[\^$]/g, "")}</p>}
-                                    <p className='capitalize text-neutral-300 font-light'>{trimedKeyword}</p>
-                                    {result.startsWith("$") && <p className='capitalize font-bold text-neutral-100'>{result.replace(/[\^$]/g, "")}</p>}
-                                </div>
-                                <div className='space-x-3'>
-                                    <Dialog>
-                                        <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, domain))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>
-                                            .com
-                                        </DialogTrigger>
-                                        <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0">
-                                            <DialogHeader>
-                                                <DialogTitle className="text-center text-3xl">{currentDomain}.com</DialogTitle>
-                                                <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
-                                                    {isFetching && <Loader size={40} className='animate-spin m-5' />}
+                    {sortedData.map((result, index) => (
+                        <li className='p-5 border border-[#6feec7] border-opacity-25 capitalize flex justify-between' key={index}>
+                            <div className='flex'>
+                                <p
+                                    className='capitalize font-bold text-neutral-100'
+                                    dangerouslySetInnerHTML={{ __html: result.replace(/\$/g, `<span class='capitalize text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
+                                />
+                            </div>
+                            <div className='space-x-3'>
+                                <Dialog>
+                                    <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, domain))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>
+                                        .com
+                                    </DialogTrigger>
+                                    <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0">
+                                        <DialogHeader>
+                                            <DialogTitle className="text-center text-3xl">{currentDomain}.com</DialogTitle>
+                                            <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
+                                                {isFetching && <Loader size={40} className='animate-spin m-5' />}
 
-                                                    {domainStatus?.available && <span>{currentDomain}.com is still avaiblable</span>}
-                                                    {(domainStatus && (domainStatus.available == false)) &&
-                                                        <span className='text-red-500'>{currentDomain}.com is not avaiblable</span>}
-                                                </DialogDescription>
-                                            </DialogHeader>
+                                                {domainStatus?.available && <span>{currentDomain}.com is still avaiblable</span>}
+                                                {(domainStatus && (domainStatus.available === false)) &&
+                                                    <span className='text-red-500'>{currentDomain}.com is not avaiblable</span>}
+                                            </DialogDescription>
+                                        </DialogHeader>
 
-                                            {domainStatus?.available && <DialogFooter className={"sm:justify-center mt-5 sm:flex-col sm:space-x-0 gap-3"}>
-                                                <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
-                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
-                                                </a>
-                                                <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
-                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Free with Hosting on Dreamhost</button>
-                                                </a>
-                                            </DialogFooter>}
-                                        </DialogContent>
-                                    </Dialog>
+                                        {domainStatus?.available && <DialogFooter className={"sm:justify-center mt-5 sm:flex-col sm:space-x-0 gap-3"}>
+                                            <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
+                                            </a>
+                                            <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Free with Hosting on Dreamhost</button>
+                                            </a>
+                                        </DialogFooter>}
+                                    </DialogContent>
+                                </Dialog>
 
-                                </div>
-                            </li>
-                        )
-                    })}
+                            </div>
+                        </li>
+                    ))}
                 </ul>
             </div>
             <div>
