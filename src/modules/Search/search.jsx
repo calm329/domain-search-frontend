@@ -15,6 +15,7 @@ import {
 } from "../../Components/ui/dialog.jsx";
 import { checkDomainAvaiblity, getSuggetion } from '../../lib/domain';
 import { useQuery } from '@tanstack/react-query';
+import { Loader } from 'lucide-react';
 
 
 const Search = () => {
@@ -34,7 +35,7 @@ const Search = () => {
         staleTime: Infinity
     });
 
-    const { data: domainStatus } = useQuery({
+    const { data: domainStatus, isFetching } = useQuery({
         queryKey: [currentDomain],
         queryFn: checkDomainAvaiblity,
         enabled: !!currentDomain,
@@ -123,7 +124,9 @@ const Search = () => {
                                         <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0">
                                             <DialogHeader>
                                                 <DialogTitle className="text-center text-3xl">{currentDomain}.com</DialogTitle>
-                                                <DialogDescription className="pt-5 text-center text-base text-neutral-300">
+                                                <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
+                                                    {isFetching && <Loader size={40} className='animate-spin m-5' />}
+
                                                     {domainStatus?.available && <span>{currentDomain}.com is still avaiblable</span>}
                                                     {(domainStatus && (domainStatus.available == false)) &&
                                                         <span className='text-red-500'>{currentDomain}.com is not avaiblable</span>}
