@@ -3,21 +3,12 @@ import serachIcon from '../../assets/search.svg'
 import { Link, useNavigate } from 'react-router-dom'
 
 const HomeSection = () => {
-
   const keywords = [
     'app', 'blog', 'coffee', 'dating', 'fly', 'football', 'fun', 'game', 'gym', "help", 'iphone', 'mail', 'news', 'note', 'party', 'photo', 'pic', 'running', 'scifi', 'seo', 'shopping', 'sports', 'startup', 'stock', 'store', 'sushi', 'todo', 'web', 'world', 'yoga',
-  ]
+  ];
 
-  const [domain, setDomain] = useState('')
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/search/${encodeURIComponent(searchTerm.trim())}`);
-    }
-  };
 
 
   return (
@@ -32,7 +23,7 @@ const HomeSection = () => {
         <input value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)} placeholder='Search for a domain' className=' bg-transparent outline-none border-none h-[40px] w-full px-4 text-[18px] py-2 text-[#6feec7] placeholder:text-[#6feec7]' type="text" />
         <div className=' bg-[#6feec7] w-[80px] h-full flex items-center justify-center '>
-          <img onClick={handleSearch} className='w-[36px] cursor-pointer text-[#111]' src={serachIcon} alt="" />
+          <img onClick={() => navigate(`/search/${searchTerm}`)} className='w-[36px] cursor-pointer text-[#111]' src={serachIcon} alt="" />
         </div>
       </div>
 
