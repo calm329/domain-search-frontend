@@ -47,8 +47,8 @@ const Search = () => {
         let _data;
 
         if (filter === "all") _data = suggetionsData?.extentions;
-        else if (filter === "start") _data = suggetionsData?.extentions?.filter((_d) => _d.endsWith("$"));
-        else if (filter === "end") _data = suggetionsData?.extentions?.filter((_d) => _d.startsWith("$"));
+        else if (filter === "start") _data = suggetionsData?.extentions?.filter((_d) => _d.startsWith("$"));
+        else if (filter === "end") _data = suggetionsData?.extentions?.filter((_d) => _d.endsWith("$"));
 
         if (sortOrder === 'popularity') return _data;
 
@@ -137,7 +137,13 @@ const Search = () => {
                                                 <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
                                             </a>
                                             <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
-                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Free with Hosting on Dreamhost</button>
+                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>
+                                            </a>
+                                            <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>
+                                            </a>
+                                            <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Buisness - Cloudways</button>
                                             </a>
                                         </DialogFooter>}
                                     </DialogContent>
