@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Header from '../../Components/Header/header';
 import serachIcon from '../../assets/search.svg';
 import Footer from '../../Components/Footer/footer';
@@ -15,7 +15,7 @@ import {
 } from "../../Components/ui/dialog.jsx";
 import { checkDomainAvaiblity, getSuggetion } from '../../lib/domain';
 import { useQuery } from '@tanstack/react-query';
-import { Loader } from 'lucide-react';
+import { LayoutGrid, Loader, Rows3 } from 'lucide-react';
 
 
 const Search = () => {
@@ -25,6 +25,7 @@ const Search = () => {
     const [domain, setDomain] = useState(keyword);
     const [sortOrder, setSortOrder] = useState("popularity");
     const [filter, setFilter] = useState("all");
+    const [layout, setLayout] = useState("group");
 
     const trimedKeyword = decodeURIComponent(keyword).replace(/\s+/g, '');
 
@@ -32,7 +33,7 @@ const Search = () => {
         queryKey: [trimedKeyword],
         queryFn: getSuggetion,
         enabled: trimedKeyword !== "undefined",
-        staleTime: Infinity
+        staleTime: Infinity,
     });
 
     const { data: domainStatus, isFetching } = useQuery({
@@ -42,7 +43,7 @@ const Search = () => {
         staleTime: Infinity
     });
 
-    const sortedData = React.useMemo(() => {
+    const sortedData = useMemo(() => {
         if (!suggetionsData?.extentions) return [];
         let _data;
 
@@ -60,6 +61,17 @@ const Search = () => {
             } else return a.length - b.length;
         });
     }, [suggetionsData, sortOrder, filter]);
+
+    const chunkArray = (arr, size) => {
+        const result = [];
+        for (let i = 0; i < arr.length; i += size) {
+            result.push(arr.slice(i, i + size));
+        };
+
+        return result;
+    };
+
+    const groupedItems = useMemo(() => chunkArray(sortedData, 4), [sortedData]);
 
     return (
         <div className='w-full min-h-[100vh] max-h-auto  opensans bg-[#0D0D15] '>
@@ -79,14 +91,17 @@ const Search = () => {
                     <option value="length">Length</option>
                     <option value="alphabetical">Alphabetical</option>
                 </select>
-                <p>Search Term Filter</p>
+                <p className='ml-5'>Search Term Filter</p>
                 <select value={filter} onChange={(e) => setFilter(e.target.value)} className='h-10 opensans outline-none px-2 bg-[#6feec7] rounded-lg text-[#2A2A2A]'>
                     <option value="all">All</option>
                     <option value="start">Starts with term</option>
                     <option value="end">Ends with term</option>
                 </select>
+
+                <LayoutGrid className='ml-5 cursor-pointer' onClick={() => setLayout("group")} color={(layout == "group") ? "#6feec7" : "#ffffff"} />
+                <Rows3 className=' cursor-pointer' onClick={() => setLayout("list")} color={(layout == "list") ? "#6feec7" : "#ffffff"} />
             </div>
-            <div className='flex  min-h-[45vh] max-h-auto items-center my-8 flex-col'>
+            <div className='flex  min-h-[45vh] max-h-auto items-center my-10 flex-col'>
 
                 <p className='text-xl font-semibold text-white'>{trimedKeyword !== "undefined" ? `Search results for ${trimedKeyword}` : "Try searching domains"}</p>
 
@@ -106,53 +121,107 @@ const Search = () => {
                     ))}
                 </div>
 
-                <ul className='text-white py-4 max-w-[1000px] w-full px-4 mt-6'>
-                    {sortedData.map((result, index) => (
-                        <li className='p-5 border border-[#6feec7] border-opacity-25 capitalize flex justify-between' key={index}>
-                            <div className='flex'>
-                                <p
-                                    className='capitalize font-bold text-neutral-100'
-                                    dangerouslySetInnerHTML={{ __html: result.replace(/\$/g, `<span class='capitalize text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
-                                />
+                <div className='text-white py-4 mt-6 max-w-[1400px] w-full'>
+                    {layout == "group" && <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 w-full'>
+                        {groupedItems.map((results, index) => (
+                            <div className='w-full'>
+                                {results.map((result, index) => (
+                                    <li className='p-5 border border-[#6feec7] border-opacity-25 capitalize flex justify-between' key={index}>
+                                        <div className='flex'>
+                                            <p
+                                                className='capitalize font-bold text-neutral-100'
+                                                dangerouslySetInnerHTML={{ __html: result.replace(/\$/g, `<span class='capitalize text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
+                                            />
+                                        </div>
+                                        <div className='space-x-3'>
+                                            <Dialog>
+                                                <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, domain))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>
+                                                    .com
+                                                </DialogTrigger>
+                                                <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0">
+                                                    <DialogHeader>
+                                                        <DialogTitle className="text-center text-3xl">{currentDomain}.com</DialogTitle>
+                                                        <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
+                                                            {isFetching && <Loader size={40} className='animate-spin m-5' />}
+
+                                                            {domainStatus?.available && <span>{currentDomain}.com is still avaiblable</span>}
+                                                            {(domainStatus && (domainStatus.available === false)) &&
+                                                                <span className='text-red-500'>{currentDomain}.com is not avaiblable</span>}
+                                                        </DialogDescription>
+                                                    </DialogHeader>
+
+                                                    {domainStatus?.available && <DialogFooter className={"sm:justify-center mt-5 sm:flex-col sm:space-x-0 gap-3"}>
+                                                        <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                            <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
+                                                        </a>
+                                                        <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                            <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>
+                                                        </a>
+                                                        <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                            <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>
+                                                        </a>
+                                                        <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                            <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Buisness - Cloudways</button>
+                                                        </a>
+                                                    </DialogFooter>}
+                                                </DialogContent>
+                                            </Dialog>
+
+                                        </div>
+                                    </li>
+                                ))}
                             </div>
-                            <div className='space-x-3'>
-                                <Dialog>
-                                    <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, domain))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>
-                                        .com
-                                    </DialogTrigger>
-                                    <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0">
-                                        <DialogHeader>
-                                            <DialogTitle className="text-center text-3xl">{currentDomain}.com</DialogTitle>
-                                            <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
-                                                {isFetching && <Loader size={40} className='animate-spin m-5' />}
+                        ))}
+                    </div>}
 
-                                                {domainStatus?.available && <span>{currentDomain}.com is still avaiblable</span>}
-                                                {(domainStatus && (domainStatus.available === false)) &&
-                                                    <span className='text-red-500'>{currentDomain}.com is not avaiblable</span>}
-                                            </DialogDescription>
-                                        </DialogHeader>
+                    {layout == "list" && <ul className='max-w-[1000px] w-full mx-auto px-4'>
+                        {sortedData.map((result, index) => (
+                            <li className='p-5 border border-[#6feec7] border-opacity-25 capitalize flex justify-between' key={index}>
+                                <div className='flex'>
+                                    <p
+                                        className='capitalize font-bold text-neutral-100'
+                                        dangerouslySetInnerHTML={{ __html: result.replace(/\$/g, `<span class='capitalize text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
+                                    />
+                                </div>
+                                <div className='space-x-3'>
+                                    <Dialog>
+                                        <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, domain))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>
+                                            .com
+                                        </DialogTrigger>
+                                        <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0">
+                                            <DialogHeader>
+                                                <DialogTitle className="text-center text-3xl">{currentDomain}.com</DialogTitle>
+                                                <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
+                                                    {isFetching && <Loader size={40} className='animate-spin m-5' />}
 
-                                        {domainStatus?.available && <DialogFooter className={"sm:justify-center mt-5 sm:flex-col sm:space-x-0 gap-3"}>
-                                            <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
-                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
-                                            </a>
-                                            <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
-                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>
-                                            </a>
-                                            <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
-                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>
-                                            </a>
-                                            <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
-                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Buisness - Cloudways</button>
-                                            </a>
-                                        </DialogFooter>}
-                                    </DialogContent>
-                                </Dialog>
+                                                    {domainStatus?.available && <span>{currentDomain}.com is still avaiblable</span>}
+                                                    {(domainStatus && (domainStatus.available === false)) &&
+                                                        <span className='text-red-500'>{currentDomain}.com is not avaiblable</span>}
+                                                </DialogDescription>
+                                            </DialogHeader>
 
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                                            {domainStatus?.available && <DialogFooter className={"sm:justify-center mt-5 sm:flex-col sm:space-x-0 gap-3"}>
+                                                <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
+                                                </a>
+                                                <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>
+                                                </a>
+                                                <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>
+                                                </a>
+                                                <a href='https://namecheapreferalurl.com' target="_blank" without rel="noreferrer">
+                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Buisness - Cloudways</button>
+                                                </a>
+                                            </DialogFooter>}
+                                        </DialogContent>
+                                    </Dialog>
+
+                                </div>
+                            </li>
+                        ))}
+                    </ul>}
+                </div>
             </div>
             <div>
 
