@@ -34,13 +34,17 @@ const Search = () => {
         queryFn: getSuggetion,
         enabled: trimedKeyword !== "undefined",
         staleTime: Infinity,
+        retry: 1,
+        retryDelay: 2500,
     });
 
     const { data: domainStatus, isFetching } = useQuery({
         queryKey: [currentDomain],
         queryFn: checkDomainAvaiblity,
         enabled: !!currentDomain,
-        staleTime: Infinity
+        staleTime: Infinity,
+        retry: 1,
+        retryDelay: 2500,
     });
 
     const sortedData = useMemo(() => {
@@ -48,8 +52,8 @@ const Search = () => {
         let _data;
 
         if (filter === "all") _data = suggetionsData?.extentions;
-        else if (filter === "start") _data = suggetionsData?.extentions?.filter((_d) => _d.startsWith("$"));
-        else if (filter === "end") _data = suggetionsData?.extentions?.filter((_d) => _d.endsWith("$"));
+        else if (filter === "start") _data = suggetionsData?.extentions?.filter((_d) => _d.startsWith(trimedKeyword));
+        else if (filter === "end") _data = suggetionsData?.extentions?.filter((_d) => _d.endsWith(trimedKeyword));
 
         if (sortOrder === 'popularity') return _data;
 
@@ -126,11 +130,11 @@ const Search = () => {
                         {groupedItems.map((results, index) => (
                             <div className='w-full'>
                                 {results.map((result, index) => (
-                                    <li className='p-5 border border-[#6feec7] border-opacity-25 capitalize flex justify-between' key={index}>
+                                    <li className='p-5 border border-[#6feec7] border-opacity-25 flex justify-between' key={index}>
                                         <div className='flex'>
                                             <p
-                                                className='capitalize font-bold text-neutral-100'
-                                                dangerouslySetInnerHTML={{ __html: result.replace(/\$/g, `<span class='capitalize text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
+                                                className='font-bold text-neutral-100'
+                                                dangerouslySetInnerHTML={{ __html: result.replace(trimedKeyword, `<span class='text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
                                             />
                                         </div>
                                         <div className='space-x-3'>
@@ -176,11 +180,11 @@ const Search = () => {
 
                     {layout == "list" && <ul className='max-w-[1000px] w-full mx-auto px-4'>
                         {sortedData.map((result, index) => (
-                            <li className='p-5 border border-[#6feec7] border-opacity-25 capitalize flex justify-between' key={index}>
+                            <li className='p-5 border border-[#6feec7] border-opacity-25 flex justify-between' key={index}>
                                 <div className='flex'>
                                     <p
-                                        className='capitalize font-bold text-neutral-100'
-                                        dangerouslySetInnerHTML={{ __html: result.replace(/\$/g, `<span class='capitalize text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
+                                        className='font-bold text-neutral-100'
+                                        dangerouslySetInnerHTML={{ __html: result.replace(trimedKeyword, `<span class='text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
                                     />
                                 </div>
                                 <div className='space-x-3'>
