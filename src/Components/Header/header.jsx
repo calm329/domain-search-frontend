@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <header className='w-full bg-[#2A323C] h-20 flex items-center px-8'>
       <Link to={'/'}>
-      <h1 className='text-white text-2xl font-openSans'>Domain Search</h1>
+      <h1 className='text-white text-2xl font-openSans'>DomaiInHand</h1>
       </Link>
     </header>
   )
