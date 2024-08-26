@@ -29,7 +29,7 @@ const Search = () => {
 
     const trimedKeyword = decodeURIComponent(keyword).replace(/\s+/g, '');
 
-    const { data: suggetionsData } = useQuery({
+    const { data: suggetionsData, isFetching: isSuggetionFetching } = useQuery({
         queryKey: [trimedKeyword],
         queryFn: getSuggetion,
         enabled: trimedKeyword !== "undefined",
@@ -52,8 +52,8 @@ const Search = () => {
         let _data;
 
         if (filter === "all") _data = suggetionsData?.extentions;
-        else if (filter === "start") _data = suggetionsData?.extentions?.filter((_d) => _d.startsWith(trimedKeyword));
-        else if (filter === "end") _data = suggetionsData?.extentions?.filter((_d) => _d.endsWith(trimedKeyword));
+        else if (filter === "start") _data = suggetionsData?.extentions?.filter((_d) => _d.toLowerCase().startsWith(trimedKeyword));
+        else if (filter === "end") _data = suggetionsData?.extentions?.filter((_d) => _d.toLowerCase().endsWith(trimedKeyword));
 
         if (sortOrder === 'popularity') return _data;
 
@@ -102,12 +102,14 @@ const Search = () => {
                     <option value="end">Ends with term</option>
                 </select>
 
-                <LayoutGrid className='ml-5 cursor-pointer' onClick={() => setLayout("group")} color={(layout == "group") ? "#6feec7" : "#ffffff"} />
-                <Rows3 className=' cursor-pointer' onClick={() => setLayout("list")} color={(layout == "list") ? "#6feec7" : "#ffffff"} />
+                <LayoutGrid className='ml-5 cursor-pointer' onClick={() => setLayout("group")} color={(layout === "group") ? "#6feec7" : "#ffffff"} />
+                <Rows3 className=' cursor-pointer' onClick={() => setLayout("list")} color={(layout === "list") ? "#6feec7" : "#ffffff"} />
             </div>
             <div className='flex  min-h-[45vh] max-h-auto items-center my-10 flex-col'>
 
                 <p className='text-xl font-semibold text-white'>{trimedKeyword !== "undefined" ? `Search results for ${trimedKeyword}` : "Try searching domains"}</p>
+
+                {isSuggetionFetching && <span className='text-white'><Loader size={40} className='animate-spin m-5' /></span>}
 
                 <div className='mt-10 py-4 max-w-[1000px] w-full px-4'>
 
@@ -126,7 +128,7 @@ const Search = () => {
                 </div>
 
                 <div className='text-white py-4 mt-6 max-w-[1400px] w-full'>
-                    {layout == "group" && <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 w-full'>
+                    {layout === "group" && <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 w-full'>
                         {groupedItems.map((results, index) => (
                             <div className='w-full'>
                                 {results.map((result, index) => (
@@ -178,7 +180,7 @@ const Search = () => {
                         ))}
                     </div>}
 
-                    {layout == "list" && <ul className='max-w-[1000px] w-full mx-auto px-4'>
+                    {layout === "list" && <ul className='max-w-[1000px] w-full mx-auto px-4'>
                         {sortedData.map((result, index) => (
                             <li className='p-5 border border-[#6feec7] border-opacity-25 flex justify-between' key={index}>
                                 <div className='flex'>
