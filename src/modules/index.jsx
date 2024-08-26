@@ -1,12 +1,12 @@
 import React from 'react'
-import Home_Section from './Home'
+import HomeSection from './Home'
 import Footer from '../Components/Footer/footer'
 
 const Main_Page = () => {
   return (
     <div className=''>
-        <Home_Section/>
-        <Footer/>
+      <HomeSection />
+      <Footer />
     </div>
   )
 }

@@ -1,17 +1,27 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Main_Page from "./modules";
+import MainPage from "./modules";
 import Search from "./modules/Search/search";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
+  const queryClient = new QueryClient();
+
   return (
-    <div className=""  >
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Main_Page/>}/>
-          <Route path="/search/:keyword?" element={<Search/>}/>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      {/* <ReactQueryDevtools initialIsOpen={true} /> */}
+      <div className=""  >
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/search/:keyword?" element={<Search />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </QueryClientProvider>
   );
 }
 
