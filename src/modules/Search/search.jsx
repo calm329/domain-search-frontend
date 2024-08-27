@@ -78,50 +78,57 @@ const Search = () => {
     const groupedItems = useMemo(() => chunkArray(sortedData, 4), [sortedData]);  
 
     return (  
-        <div className='w-full min-h-[100vh] max-h-auto  opensans bg-[#0D0D15] '>  
+        <div className='w-full min-h-[100vh] max-h-auto opensans bg-[#0D0D15] '>  
             <Header />  
             <div className='bg-[#1D1C28] py-8 flex justify-center text-center' >  
                 <div className='w-[350px] lg:w-[700px] h-[60px] flex items-center overflow-hidden rounded-lg'>  
-                    <input value={domain} onChange={(e) => setDomain(e.target.value)} placeholder='Search for a domain' className='opensans  bg-transperant outline-none border-none h-[60px] w-full px-4 text-2xl py-2' type="text" />  
-                    <div onClick={() => navigate(`/search/${domain}`)} className=' bg-[#6feec7] w-[80px] h-full flex items-center justify-center cursor-pointer'>  
+                    <input value={domain} onChange={(e) => setDomain(e.target.value)} placeholder='Search for a domain' className='opensans bg-transperant outline-none border-none h-[60px] w-full px-4 text-lg lg:text-2xl py-2' type="text" />  
+                    <div onClick={() => navigate(`/search/${domain}`)} className='bg-[#6feec7] w-[80px] h-full flex items-center justify-center cursor-pointer'>  
                         <img className='w-[36px] text-[#111]' src={serachIcon} alt="" />  
                     </div>  
                 </div>  
             </div>  
-            <div className='w-full h-20 flex justify-center items-center gap-4 border-b text-white border-[#5a5a5a]'>  
-                <p>Sort Results</p>  
-                <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className='h-10 opensans outline-none px-2  bg-[#6feec7] rounded-lg text-[#2A2A2A]'>  
-                    <option value="popularity">Popularity</option>  
-                    <option value="length">Length</option>  
-                    <option value="alphabetical">Alphabetical</option>  
-                </select>  
-                <p className='ml-5'>Search Term Filter</p>  
-                <select value={filter} onChange={(e) => setFilter(e.target.value)} className='h-10 opensans outline-none px-2 bg-[#6feec7] rounded-lg text-[#2A2A2A]'>  
-                    <option value="all">All</option>  
-                    <option value="start">Starts with term</option>  
-                    <option value="end">Ends with term</option>  
-                </select>  
+            <div className='w-full flex flex-col items-center gap-4 border-b text-white border-[#5a5a5a] px-4 py-4 lg:flex-row lg:justify-center lg:h-20'>  
+                <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8">  {/* Adjusted gap here */}  
+                    <div className="flex items-center gap-4">  {/* Adjusted gap here */}  
+                        <p>Sort Results</p>  
+                        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className='min-w-[150px] h-10 opensans outline-none px-2 bg-[#6feec7] rounded-lg text-[#2A2A2A]'>  
+                            <option value="popularity">Popularity</option>  
+                            <option value="length">Length</option>  
+                            <option value="alphabetical">Alphabetical</option>  
+                        </select>  
+                    </div>  
+                    <div className="flex items-center gap-4">  {/* Adjusted gap here */}  
+                        <p>Filter</p>  
+                        <select value={filter} onChange={(e) => setFilter(e.target.value)} className='min-w-[150px] h-10 opensans outline-none px-2 bg-[#6feec7] rounded-lg text-[#2A2A2A]'>  
+                            <option value="all">All</option>  
+                            <option value="start">Starts with term</option>  
+                            <option value="end">Ends with term</option>  
+                        </select>  
+                    </div>  
+                </div>  
 
-                <LayoutGrid className='ml-5 cursor-pointer' onClick={() => setLayout("group")} color={(layout === "group") ? "#6feec7" : "#ffffff"} />  
-                <Rows3 className=' cursor-pointer' onClick={() => setLayout("list")} color={(layout === "list") ? "#6feec7" : "#ffffff"} />  
-            </div>  
-            <div className='flex  min-h-[45vh] max-h-auto items-center my-10 flex-col'>  
+                <div className='flex items-center gap-4 mt-4 lg:mt-0'>  
+                    <LayoutGrid className='ml-5 cursor-pointer' onClick={() => setLayout("group")} color={(layout === "group") ? "#6feec7" : "#ffffff"} />  
+                    <Rows3 className='cursor-pointer' onClick={() => setLayout("list")} color={(layout === "list") ? "#6feec7" : "#ffffff"} />  
+                </div>  
+            </div>
 
+            <div className='flex w-full min-h-[45vh] max-h-auto items-center my-10 flex-col px-4 text-center'>  
                 <p className='text-xl font-semibold text-white'>{trimedKeyword !== "undefined" ? `Search results for ${trimedKeyword}` : "Try searching domains"}</p>  
 
                 {isSuggetionFetching && <span className='text-white'><Loader size={40} className='animate-spin m-5' /></span>}  
 
-                <div className='mt-10 py-4 max-w-[1000px] w-full px-4'>  
-
+                <div className='mt-10 py-4 max-w-[1000px] w-full'>  
                     {suggetionsData?.avaiblity && suggetionsData?.avaiblity?.map((mainDomain, index) => (  
                         <div className='p-5 border border-[#6feec7] border-opacity-25 flex justify-between items-center' key={index}>  
                             <p className={`${mainDomain.available ? "font-bold text-neutral-100" : "text-neutral-500 line-through font-light"}`}>{mainDomain?.domain}</p>  
                             <div className='space-x-3'>  
                                 {mainDomain.available ?  
-                                    <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" without rel="noreferrer">  
+                                    <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" rel="noreferrer">  
                                         <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A]'>Register</button>  
                                     </a> :  
-                                    <p className='text-neutral-500 font-light px-5 py-2'>Not Avaiblable</p>}  
+                                    <p className='text-neutral-500 font-light px-5 py-2'>Not Available</p>}  
                             </div>  
                         </div>  
                     ))}  
@@ -144,32 +151,34 @@ const Search = () => {
                                                 <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, ''))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>  
                                                     .com  
                                                 </DialogTrigger>  
-                                                <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0">  
-                                                    <DialogHeader>  
-                                                        <DialogTitle className="text-center text-3xl">{currentDomain}.com</DialogTitle>  
+                                                <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0 px-4 py-6 max-w-full md:max-w-3xl mx-auto">  
+                                                    <DialogHeader className='w-full mb-4'>  
+                                                        <DialogTitle className="text-center text-3xl break-all w-full mb-4" style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>  
+                                                            {currentDomain}.com  
+                                                        </DialogTitle>  
                                                         <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">  
                                                             {isFetching && <Loader size={40} className='animate-spin m-5' />}  
-
-                                                            {domainStatus?.available && <span>{currentDomain}.com is still avaiblable</span>}  
-                                                            {(domainStatus && (domainStatus.available === false)) &&  
-                                                                <span className='text-red-500'>{currentDomain}.com is not avaiblable</span>}  
+                                                            {domainStatus?.available && <span>{currentDomain}.com is still available</span>}  
+                                                            {(domainStatus && (domainStatus.available === false)) && <span className='text-red-500'>{currentDomain}.com is not available</span>}  
                                                         </DialogDescription>  
                                                     </DialogHeader>  
 
-                                                    {domainStatus?.available && <DialogFooter className={"sm:justify-center mt-5 sm:flex-col sm:space-x-0 gap-3"}>  
-                                                        <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" rel="noreferrer">  
-                                                            <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>  
-                                                        </a>  
-                                                        <a href='http://click.dreamhost.com/SHxV' target="_blank" rel="noreferrer">  
-                                                            <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>  
-                                                        </a>  
-                                                        <a href='https://www.a2hosting.com/?aid=5c763a8f6a0f3&bid=d6664600' target="_blank" rel="noreferrer">  
-                                                            <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>  
-                                                        </a>  
-                                                        <a href='https://www.cloudways.com/en/?id=1755288' target="_blank" rel="noreferrer">  
-                                                            <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Business - Cloudways</button>  
-                                                        </a>  
-                                                    </DialogFooter>}  
+                                                    {domainStatus?.available && (  
+                                                        <DialogFooter className="sm:justify-center mt-5 sm:flex-col sm:space-y-3">  
+                                                            <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" rel="noreferrer" className="w-full">  
+                                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Get Here on Namecheap</button>  
+                                                            </a>  
+                                                            <a href='http://click.dreamhost.com/SHxV' target="_blank" rel="noreferrer" className="w-full">  
+                                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Best for Bloggers - Dreamhost</button>  
+                                                            </a>  
+                                                            <a href='https://www.a2hosting.com/?aid=5c763a8f6a0f3&bid=d6664600' target="_blank" rel="noreferrer" className="w-full">  
+                                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Best for Affiliates - A2 Hosting</button>  
+                                                            </a>  
+                                                            <a href='https://www.cloudways.com/en/?id=1755288' target="_blank" rel="noreferrer" className="w-full">  
+                                                                <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Business - Cloudways</button>  
+                                                            </a>  
+                                                        </DialogFooter>  
+                                                    )}  
                                                 </DialogContent>  
                                             </Dialog>  
                                         </div>  
@@ -193,42 +202,39 @@ const Search = () => {
                                         <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, ''))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>  
                                             .com  
                                         </DialogTrigger>  
-                                        <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0">  
-                                            <DialogHeader>  
-                                                <DialogTitle className="text-center text-3xl">{currentDomain}.com</DialogTitle>  
+                                        <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0 px-4 py-6 max-w-full md:max-w-3xl">  
+                                            <DialogHeader className='w-full mb-4'>  
+                                                <DialogTitle className="text-center text-3xl break-all w-full mb-4" style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>{currentDomain}.com</DialogTitle>  
                                                 <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">  
                                                     {isFetching && <Loader size={40} className='animate-spin m-5' />}  
-
-                                                    {domainStatus?.available && <span>{currentDomain}.com is still avaiblable</span>}  
-                                                    {(domainStatus && (domainStatus.available === false)) &&  
-                                                        <span className='text-red-500'>{currentDomain}.com is not avaiblable</span>}  
+                                                    {domainStatus?.available && <span>{currentDomain}.com is still available</span>}  
+                                                    {(domainStatus && (domainStatus.available === false)) && <span className='text-red-500'>{currentDomain}.com is not available</span>}  
                                                 </DialogDescription>  
                                             </DialogHeader>  
 
-                                            {domainStatus?.available && <DialogFooter className={"sm:justify-center mt-5 sm:flex-col sm:space-x-0 gap-3"}>  
-                                                <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" rel="noreferrer">  
-                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>  
-                                                </a>  
-                                                <a href='http://click.dreamhost.com/SHxV' target="_blank" rel="noreferrer">  
-                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>  
-                                                </a>  
-                                                <a href='https://www.a2hosting.com/?aid=5c763a8f6a0f3&bid=d6664600' target="_blank" rel="noreferrer">  
-                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>  
-                                                </a>  
-                                                <a href='https://www.cloudways.com/en/?id=1755288' target="_blank" rel="noreferrer">  
-                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Business - Cloudways</button>  
-                                                </a>  
-                                            </DialogFooter>}  
-                                        </DialogContent>  
+                                            {domainStatus?.available && (  
+                                                <DialogFooter className="sm:justify-center mt-5 sm:flex-col sm:space-y-3">  
+                                                    <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" rel="noreferrer" className="w-full">  
+                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Get Here on Namecheap</button>  
+                                                    </a>  
+                                                    <a href='http://click.dreamhost.com/SHxV' target="_blank" rel="noreferrer" className="w-full">  
+                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Best for Bloggers - Dreamhost</button>  
+                                                    </a>  
+                                                    <a href='https://www.a2hosting.com/?aid=5c763a8f6a0f3&bid=d6664600' target="_blank" rel="noreferrer" className="w-full">  
+                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Best for Affiliates - A2 Hosting</button>  
+                                                    </a>  
+                                                    <a href='https://www.cloudways.com/en/?id=1755288' target="_blank" rel="noreferrer" className="w-full">  
+                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Business - Cloudways</button>  
+                                                    </a>  
+                                                </DialogFooter>  
+                                            )}  
+                                        </DialogContent>          
                                     </Dialog>  
                                 </div>  
                             </li>  
                         ))}  
                     </ul>}  
                 </div>  
-            </div>  
-            <div>  
-
             </div>  
             <Footer />  
         </div>  
