@@ -64,7 +64,7 @@ const Search = () => {
                 return a.replace(/[\^$]/g, "").localeCompare(b.replace(/[\^$]/g, ""));
             } else return a.length - b.length;
         });
-    }, [suggetionsData, sortOrder, filter]);
+    }, [suggetionsData, sortOrder, filter, trimedKeyword]);
 
     const chunkArray = (arr, size) => {
         const result = [];
@@ -108,7 +108,7 @@ const Search = () => {
                     </div>
                 </div>
 
-                <div className='flex items-center gap-4 mt-4 lg:mt-0'>
+                <div className='items-center gap-4 mt-4 lg:mt-0 md:flex hidden'>
                     <LayoutGrid className='ml-5 cursor-pointer' onClick={() => setLayout("group")} color={(layout === "group") ? "#6feec7" : "#ffffff"} />
                     <Rows3 className='cursor-pointer' onClick={() => setLayout("list")} color={(layout === "list") ? "#6feec7" : "#ffffff"} />
                 </div>
@@ -139,11 +139,11 @@ const Search = () => {
                         {groupedItems.map((results, index) => (
                             <div className='w-full' key={index}>
                                 {results.map((result, index) => (
-                                    <li className='p-5 border border-[#6feec7] border-opacity-25 flex justify-between' key={index}>
+                                    <li className='sm:p-5 p-3 border border-[#6feec7] border-opacity-25 flex justify-between w-full overflow-hidden' key={index}>
                                         <div className='flex'>
                                             <p
-                                                className='font-bold text-neutral-100'
-                                                dangerouslySetInnerHTML={{ __html: result.replace(trimedKeyword, `<span class='text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
+                                                className='font-bold text-sm sm:text-base text-neutral-100 break-all'
+                                                dangerouslySetInnerHTML={{ __html: result.toLowerCase().replace(trimedKeyword, `<span class='text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
                                             />
                                         </div>
                                         <div className='space-x-3'>
@@ -151,9 +151,9 @@ const Search = () => {
                                                 <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, ''))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>
                                                     .com
                                                 </DialogTrigger>
-                                                <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0 px-4 py-6 max-w-full md:max-w-3xl mx-auto">
+                                                <DialogContent className="bg-neutral-900 text-neutral-100 max-w-2xl w-full border-neutral-700 ring-0 px-4 py-6 mx-auto">
                                                     <DialogHeader className='w-full mb-4'>
-                                                        <DialogTitle className="text-center text-3xl break-all w-full mb-4" style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>
+                                                        <DialogTitle className="text-center text-base sm:text-3xl break-all w-full mb-4" style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>
                                                             {currentDomain}.com
                                                         </DialogTitle>
                                                         <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
@@ -190,11 +190,11 @@ const Search = () => {
 
                     {layout === "list" && <ul className='max-w-[1000px] w-full mx-auto px-4'>
                         {sortedData.map((result, index) => (
-                            <li className='p-5 border border-[#6feec7] border-opacity-25 flex justify-between' key={index}>
+                            <li key={index} className='sm:p-5 p-3 border border-[#6feec7] border-opacity-25 flex justify-between w-full overflow-hidden'>
                                 <div className='flex'>
                                     <p
-                                        className='font-bold text-neutral-100'
-                                        dangerouslySetInnerHTML={{ __html: result.replace(trimedKeyword, `<span class='text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
+                                        className='font-bold text-sm sm:text-base text-neutral-100 break-all'
+                                        dangerouslySetInnerHTML={{ __html: result.toLowerCase().replace(trimedKeyword, `<span class='text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
                                     />
                                 </div>
                                 <div className='space-x-3'>
@@ -202,9 +202,11 @@ const Search = () => {
                                         <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, ''))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>
                                             .com
                                         </DialogTrigger>
-                                        <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0 px-4 py-6 max-w-full md:max-w-3xl">
+                                        <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0 px-4 py-6 mx-auto">
                                             <DialogHeader className='w-full mb-4'>
-                                                <DialogTitle className="text-center text-3xl break-all w-full mb-4" style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>{currentDomain}.com</DialogTitle>
+                                                <DialogTitle className="text-center text-base sm:text-3xl break-all w-full mb-4" style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>
+                                                    {currentDomain}.com
+                                                </DialogTitle>
                                                 <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
                                                     {isFetching && <Loader size={40} className='animate-spin m-5' />}
                                                     {domainStatus?.available && <span>{currentDomain}.com is still available</span>}
@@ -213,18 +215,18 @@ const Search = () => {
                                             </DialogHeader>
 
                                             {domainStatus?.available && (
-                                                <DialogFooter className="sm:justify-center mt-5 sm:flex-col sm:space-y-3">
+                                                <DialogFooter className="flex flex-col space-y-3">
                                                     <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" rel="noreferrer" className="w-full">
-                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Get Here on Namecheap</button>
+                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
                                                     </a>
-                                                    <a href='http://click.dreamhost.com/SHxV' target="_blank" rel="noreferrer" className="w-full">
-                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Best for Bloggers - Dreamhost</button>
+                                                    <a href='http://click.dreamhost.com/SHxV' target="_blank" rel="noreferrer" className="w-full sm:space-x-0">
+                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>
                                                     </a>
-                                                    <a href='https://www.a2hosting.com/?aid=5c763a8f6a0f3&bid=d6664600' target="_blank" rel="noreferrer" className="w-full">
-                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full mb-2 sm:mb-0'>Best for Affiliates - A2 Hosting</button>
+                                                    <a href='https://www.a2hosting.com/?aid=5c763a8f6a0f3&bid=d6664600' target="_blank" rel="noreferrer" className="w-full mx-0">
+                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>
                                                     </a>
-                                                    <a href='https://www.cloudways.com/en/?id=1755288' target="_blank" rel="noreferrer" className="w-full">
-                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Professional Business - Cloudways</button>
+                                                    <a href='https://www.cloudways.com/en/?id=1755288' target="_blank" rel="noreferrer" className="w-full mx-0">
+                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2  text-[#2A2A2A] w-full'>Best for Professional Business - Cloudways</button>
                                                     </a>
                                                 </DialogFooter>
                                             )}
@@ -239,6 +241,6 @@ const Search = () => {
             <Footer />
         </div>
     )
-}
+};
 
 export default Search;
