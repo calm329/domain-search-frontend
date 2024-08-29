@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const HomeSection = () => {  
   const keywords = [  
-    'app', 'blog', 'coffee', 'dating', 'fly', 'football', 'fun', 'game', 'gym', "help", 'iphone', 'mail', 'news', 'note', 'party', 'photo', 'pic', 'running', 'scifi', 'seo', 'shopping', 'sports', 'startup', 'stock', 'store', 'sushi', 'todo', 'web', 'world', 'yoga',  
+  'game', 'smart', 'learn', 'iphone', 'web', 'eco', 'yoga',  
   ];  
 
   const [searchTerm, setSearchTerm] = useState('');  
