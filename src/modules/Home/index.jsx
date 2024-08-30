@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import searchIcon from '../../assets/search.svg';
 import { Link, useNavigate } from 'react-router-dom';
@@ -29,6 +30,40 @@ const HomeSection = () => {
           placeholder="Let's find that domain..."
           className='bg-transparent outline-none border-none text-[#2A2A2A] h-[40px] w-full px-4 text-[18px] py-2 placeholder:text-[#2A2A2A]'
           type="text"
+=======
+import React, { useState } from 'react';  
+import searchIcon from '../../assets/search.svg';  
+import { Link, useNavigate } from 'react-router-dom';  
+
+const HomeSection = () => {  
+  const keywords = [  
+  'game', 'smart', 'learn', 'iphone', 'web', 'eco', 'yoga',  
+  ];  
+
+  const [searchTerm, setSearchTerm] = useState('');  
+  const navigate = useNavigate();  
+
+  const handleSearch = () => {  
+    if (searchTerm.trim()) {  
+      navigate(`/search/${searchTerm}`);  
+    }  
+  };  
+
+  return (  
+    <section className='w-full h-auto min-h-[75vh] font-openSans flex flex-col justify-center items-center gap-8 md:gap-16 bg-[#0D0D15] py-8'>  
+
+      {/* Website Name */}  
+      <h1 className='text-3xl md:text-5xl uppercase font-semibold text-white'>Domain<span className='text-[#6feec7]'>InHand</span></h1>  
+
+      {/* Search Box */}  
+      <div className='w-[90%] max-w-[700px] h-[60px] flex border-2 border-[#6feec7] items-center overflow-hidden rounded-lg bg-white'>  
+        <input  
+          value={searchTerm}  
+          onChange={(e) => setSearchTerm(e.target.value)}  
+          placeholder="Let's find that domain..."  
+          className='bg-transparent outline-none border-none text-[#2A2A2A] h-[40px] w-full px-4 text-[18px] py-2 placeholder:text-[#2A2A2A]'  
+          type="text"  
+>>>>>>> 6e62a2ec9b07fb6c116e2db9f793e868a6c814e7
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()} // Allow search on enter key press  
         />
         <div className='bg-[#6feec7] w-[80px] h-full flex items-center justify-center cursor-pointer'

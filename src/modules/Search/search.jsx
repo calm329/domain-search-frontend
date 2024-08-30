@@ -92,7 +92,7 @@ const Search = () => {
                 <div className="flex flex-col lg:flex-row items-end gap-4 lg:gap-8">  {/* Adjusted gap here */}
                     <div className="flex items-center gap-4">  {/* Adjusted gap here */}
                         <p>Sort Results</p>
-                        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className='min-w-[150px] h-10 opensans outline-none px-2 bg-[#6feec7] rounded-lg text-[#2A2A2A]'>
+                        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className='w-[150px] h-10 opensans outline-none px-2 bg-[#6feec7] rounded-lg text-[#2A2A2A]'>
                             <option value="popularity">Popularity</option>
                             <option value="length">Length</option>
                             <option value="alphabetical">Alphabetical</option>
@@ -100,7 +100,7 @@ const Search = () => {
                     </div>
                     <div className="flex items-center gap-4">  {/* Adjusted gap here */}
                         <p>Filter</p>
-                        <select value={filter} onChange={(e) => setFilter(e.target.value)} className='min-w-[150px] h-10 opensans outline-none px-2 bg-[#6feec7] rounded-lg text-[#2A2A2A]'>
+                        <select value={filter} onChange={(e) => setFilter(e.target.value)} className='w-[150px] h-10 opensans outline-none px-2 bg-[#6feec7] rounded-lg text-[#2A2A2A]'>
                             <option value="all">All</option>
                             <option value="start">Starts with term</option>
                             <option value="end">Ends with term</option>
