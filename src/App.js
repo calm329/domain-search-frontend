@@ -11,7 +11,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className=""  >
+      <div className="">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainPage />} />

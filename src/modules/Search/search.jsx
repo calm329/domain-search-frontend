@@ -15,7 +15,7 @@ import {
 } from "../../Components/ui/dialog.jsx";
 import { checkDomainAvaiblity, getSuggetion } from '../../lib/domain';
 import { useQuery } from '@tanstack/react-query';
-import { LayoutGrid, Loader, Rows3 } from 'lucide-react';
+import { LayoutGrid, Loader, Rows3, SearchIcon } from 'lucide-react';
 
 
 const Search = () => {
@@ -84,7 +84,7 @@ const Search = () => {
                 <div className='w-[350px] lg:w-[700px] h-[60px] flex items-center overflow-hidden rounded-lg'>
                     <input value={domain} onChange={(e) => setDomain(e.target.value)} placeholder='Search for a domain' className='opensans bg-transperant outline-none border-none h-[60px] w-full px-4 text-lg lg:text-2xl py-2' type="text" />
                     <div onClick={() => navigate(`/search/${domain}`)} className='bg-[#6feec7] w-[80px] h-full flex items-center justify-center cursor-pointer'>
-                        <img className='w-[36px] text-[#111]' src={serachIcon} alt="" />
+                        <SearchIcon size={42} />
                     </div>
                 </div>
             </div>
@@ -190,49 +190,50 @@ const Search = () => {
 
                     {layout === "list" && <ul className='max-w-[1000px] w-full mx-auto px-4'>
                         {sortedData.map((result, index) => (
-                            <li key={index} className='sm:p-5 p-3 border border-[#6feec7] border-opacity-25 flex justify-between w-full overflow-hidden'>
-                                <div className='flex'>
-                                    <p
-                                        className='font-bold text-sm sm:text-base text-neutral-100 break-all'
-                                        dangerouslySetInnerHTML={{ __html: result.toLowerCase().replace(trimedKeyword, `<span class='text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
-                                    />
-                                </div>
-                                <div className='space-x-3'>
-                                    <Dialog>
-                                        <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, ''))} className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>
-                                            .com
-                                        </DialogTrigger>
-                                        <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0 px-4 py-6 mx-auto">
-                                            <DialogHeader className='w-full mb-4'>
-                                                <DialogTitle className="text-center text-base sm:text-3xl break-all w-full mb-4" style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>
-                                                    {currentDomain}.com
-                                                </DialogTitle>
-                                                <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
-                                                    {isFetching && <Loader size={40} className='animate-spin m-5' />}
-                                                    {domainStatus?.available && <span>{currentDomain}.com is still available</span>}
-                                                    {(domainStatus && (domainStatus.available === false)) && <span className='text-red-500'>{currentDomain}.com is not available</span>}
-                                                </DialogDescription>
-                                            </DialogHeader>
+                            <li key={index} className='w-full'>
+                                <Dialog>
+                                    <DialogTrigger onClick={() => setCurrentDomain(result.replace(/[\^$]/g, ''))} className='w-full'>
+                                        <div className='sm:p-5 p-3 border border-[#6feec7] border-opacity-25 flex justify-between w-full overflow-hidden'>
+                                            <div className='flex'>
+                                                <p
+                                                    className='font-bold text-sm sm:text-base text-neutral-100 break-all'
+                                                    dangerouslySetInnerHTML={{ __html: result.toLowerCase().replace(trimedKeyword, `<span class='text-neutral-300 font-light'>${trimedKeyword}</span>`) }}
+                                                />
+                                            </div>
+                                            <button className='hover:bg-[#6feec7] hover:bg-opacity-15 rounded-sm px-2 py-1 text-sm text-neutral-300'>.com</button>
 
-                                            {domainStatus?.available && (
-                                                <DialogFooter className="flex flex-col space-y-3">
-                                                    <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" rel="noreferrer" className="w-full">
-                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
-                                                    </a>
-                                                    <a href='http://click.dreamhost.com/SHxV' target="_blank" rel="noreferrer" className="w-full sm:space-x-0">
-                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>
-                                                    </a>
-                                                    <a href='https://www.a2hosting.com/?aid=5c763a8f6a0f3&bid=d6664600' target="_blank" rel="noreferrer" className="w-full mx-0">
-                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>
-                                                    </a>
-                                                    <a href='https://www.cloudways.com/en/?id=1755288' target="_blank" rel="noreferrer" className="w-full mx-0">
-                                                        <button className='bg-[#6feec7] rounded-sm px-5 py-2  text-[#2A2A2A] w-full'>Best for Professional Business - Cloudways</button>
-                                                    </a>
-                                                </DialogFooter>
-                                            )}
-                                        </DialogContent>
-                                    </Dialog>
-                                </div>
+                                        </div>
+                                    </DialogTrigger>
+                                    <DialogContent className="bg-neutral-900 text-neutral-100 border-neutral-700 ring-0 px-4 py-6 mx-auto">
+                                        <DialogHeader className='w-full mb-4'>
+                                            <DialogTitle className="text-center text-base sm:text-3xl break-all w-full mb-4" style={{ wordBreak: 'break-all', overflowWrap: 'break-word' }}>
+                                                {currentDomain}.com
+                                            </DialogTitle>
+                                            <DialogDescription className="pt-5 text-center flex justify-center items-center text-base text-neutral-300">
+                                                {isFetching && <Loader size={40} className='animate-spin m-5' />}
+                                                {domainStatus?.available && <span>{currentDomain}.com is still available</span>}
+                                                {(domainStatus && (domainStatus.available === false)) && <span className='text-red-500'>{currentDomain}.com is not available</span>}
+                                            </DialogDescription>
+                                        </DialogHeader>
+
+                                        {domainStatus?.available && (
+                                            <DialogFooter className="flex flex-col space-y-3">
+                                                <a href='https://www.tkqlhce.com/click-100703940-15083053' target="_blank" rel="noreferrer" className="w-full">
+                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Get Here on Namecheap</button>
+                                                </a>
+                                                <a href='http://click.dreamhost.com/SHxV' target="_blank" rel="noreferrer" className="w-full sm:space-x-0">
+                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Bloggers - Dreamhost</button>
+                                                </a>
+                                                <a href='https://www.a2hosting.com/?aid=5c763a8f6a0f3&bid=d6664600' target="_blank" rel="noreferrer" className="w-full mx-0">
+                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2 text-[#2A2A2A] w-full'>Best for Affiliates - A2 Hosting</button>
+                                                </a>
+                                                <a href='https://www.cloudways.com/en/?id=1755288' target="_blank" rel="noreferrer" className="w-full mx-0">
+                                                    <button className='bg-[#6feec7] rounded-sm px-5 py-2  text-[#2A2A2A] w-full'>Best for Professional Business - Cloudways</button>
+                                                </a>
+                                            </DialogFooter>
+                                        )}
+                                    </DialogContent>
+                                </Dialog>
                             </li>
                         ))}
                     </ul>}
