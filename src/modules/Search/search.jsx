@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';  
 import Header from '../../Components/Header/header';  
-import serachIcon from '../../assets/search.svg';  
 import Footer from '../../Components/Footer/footer';  
 import { useParams, useNavigate } from 'react-router-dom';  
 import {  
