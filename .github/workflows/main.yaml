@@ -1,4 +1,4 @@
-name: Upload Frontend
+name: Upload Reactd Frontend
 
 on:
   push:
